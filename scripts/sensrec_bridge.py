@@ -85,6 +85,8 @@ while not rospy.is_shutdown():
             if sensor == 'rotv_0':
                 rotv = fields
                 imu_msg = Imu()
+                imu_msg.header.stamp = rospy.get_rostime()
+
                 imu_msg.header.frame_id = 'android'
                 imu_msg.orientation.x = float(rotv[4])
                 imu_msg.orientation.y = float(rotv[5])
@@ -107,6 +109,9 @@ while not rospy.is_shutdown():
                 magn = fields
                 mag_msg = MagneticField()
                 mag_msg.header.frame_id = 'android'
+                mag_msg.header.stamp = rospy.get_rostime()
+
+                mag_msg.header.frame_id = 'android'
                 mag_msg.magnetic_field.x = float(magn[4])
                 mag_msg.magnetic_field.y = float(magn[5])
                 mag_msg.magnetic_field.z = float(magn[6])
@@ -115,12 +120,14 @@ while not rospy.is_shutdown():
             # publish pressure
             elif sensor == 'press_0':
                 msg_press = Float64()
+                msg_press.header.stamp = rospy.get_rostime()
                 msg_press.data = float(fields[4])
                 pub_pressure.publish(msg_press)
 
             # publish light
             elif sensor == "light_0":
                 msg_light = Float64()
+                msg_light.header.stamp = rospy.get_rostime()
                 msg_light.data = float(fields[4])
                 pub_light.publish(msg_light)
 
@@ -154,7 +161,7 @@ while not rospy.is_shutdown():
                 msg_fix.position_covariance_type = NavSatFix.COVARIANCE_TYPE_APPROXIMATED
                 pub_fix.publish(msg_fix)
 
-                # publish velicity
+                # publish velocity
                 msg_vel = TwistStamped()
                 msg_vel.header.frame_id = 'android'
                 msg_vel.header.stamp = stamp
